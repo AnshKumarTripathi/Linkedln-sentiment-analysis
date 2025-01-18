@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LinkedIn Sentiment Analysis</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+
+<body>
+  <div class="container mt-5">
+    <h1 class="mb-4">LinkedIn Sentiment Analysis</h1>
+    <form action="{{ url_for('analyze') }}" method="post">
+      <button type="submit" class="btn btn-primary mb-4">Analyze LinkedIn Posts</button>
+    </form>
+    {% if posts %}
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Content</th>
+          <th>Timestamp</th>
+          <th>Reactions</th>
+          <th>Sentiment</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for post in posts %}
+        <tr>
+          <td>{{ post.content }}</td>
+          <td>{{ post.timestamp }}</td>
+          <td>{{ post.reactions }}</td>
+          <td>{{ post.sentiment }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
+  </div>
+</body>
+
+</html>

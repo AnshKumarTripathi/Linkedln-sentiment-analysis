@@ -11,9 +11,45 @@
 <body>
   <div class="container mt-5">
     <h1 class="mb-4">LinkedIn Sentiment Analysis</h1>
-    <form action="{{ url_for('analyze') }}" method="post">
-      <button type="submit" class="btn btn-primary mb-4">Analyze LinkedIn Posts</button>
-    </form>
+    <div class="row mb-4">
+      <div class="col-md-4">
+        <form action="{{ url_for('analyze_feed') }}" method="post">
+          <button type="submit" class="btn btn-primary btn-block">Analyze Feed Posts</button>
+        </form>
+      </div>
+      <div class="col-md-4">
+        <form action="{{ url_for('analyze_user_posts') }}" method="post">
+          <button type="submit" class="btn btn-success btn-block">Analyze My Posts</button>
+        </form>
+      </div>
+      <div class="col-md-4">
+        <form action="{{ url_for('analyze_messages') }}" method="post">
+          <button type="submit" class="btn btn-info btn-block">Analyze Messages</button>
+        </form>
+      </div>
+    </div>
+
+    {% if error %}
+    <div class="alert alert-danger" role="alert">
+      {{ error }}
+    </div>
+    {% endif %}
+
+    {% if stats %}
+    <div class="row mb-4">
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Sentiment Statistics</h5>
+            <p>Positive: {{ stats.positive }}</p>
+            <p>Neutral: {{ stats.neutral }}</p>
+            <p>Negative: {{ stats.negative }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
     {% if posts %}
     <table class="table table-bordered">
       <thead>
@@ -22,6 +58,7 @@
           <th>Timestamp</th>
           <th>Reactions</th>
           <th>Sentiment</th>
+          <th>Polarity</th>
         </tr>
       </thead>
       <tbody>
@@ -30,7 +67,14 @@
           <td>{{ post.content }}</td>
           <td>{{ post.timestamp }}</td>
           <td>{{ post.reactions }}</td>
-          <td>{{ post.sentiment }}</td>
+          <td>
+            <span class="badge badge-{{ 'success' if post.sentiment == 'positive' 
+                                                else 'danger' if post.sentiment == 'negative' 
+                                                else 'secondary' }}">
+              {{ post.sentiment }}
+            </span>
+          </td>
+          <td>{{ post.polarity }}</td>
         </tr>
         {% endfor %}
       </tbody>
